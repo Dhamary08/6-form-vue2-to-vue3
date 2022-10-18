@@ -101,7 +101,6 @@
     </div> -->
   </div>
 </template>
-
 <script>
 export default {
   data() {
@@ -113,13 +112,12 @@ export default {
         email: '',
         terms: false,
         nickname: '',
+        passwordRepet: '',
       },
+      urlSentUsers: 'https://633398bc573c03ab0b5f72a5.mockapi.io/register',
     };
   },
   methods: {
-    console(text) {
-      console.log('text', text);
-    },
     fullNameValidator: (value) => {
       let response = false;
       if (/^[a-zA-Z ñÑáéíóúÁÉÍÓÚ]*$/.test(value)) {
@@ -132,6 +130,9 @@ export default {
       if (!/[^a-zA-Z0-9]/.test(value)) {
         response = true;
       }
+      if (value.length < 4) {
+        response = false;
+      }
       return response;
     },
     passwordValidator: (value) => {
@@ -141,6 +142,14 @@ export default {
       }
       return response;
     },
+    /*  passwordRepetValidator: (value) => {
+        let response = false;
+        const pass = this.model.password;
+        if (value === pass) {
+          response = true;
+        }
+        return response;
+      }, */
     mailValidator: (value) => {
       let response = false;
       if (value.includes('@') && value.includes('.com')) {
@@ -157,16 +166,31 @@ export default {
           variant: 'warning',
         });
       } else {
+        this.sentNewUsers();
         this.$bvToast.toast('Formulario enviado con éxito', {
           title: 'Mensaje',
           autoHideDelay: 5000,
           variant: 'success',
         });
         this.$emit('sent-form', this.model);
+        this.model = [];
       }
+    },
+    async sentNewUsers() {
+      await this.axios
+        .post(this.urlSentUsers, {
+          name: this.model.name,
+          email: this.model.email,
+          password: this.model.password,
+          username: this.model.nickname,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.log(`${error}`);
+        });
     },
   },
 };
 </script>
-
-<style scoped></style>

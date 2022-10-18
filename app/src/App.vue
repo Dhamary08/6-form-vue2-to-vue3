@@ -1,28 +1,14 @@
 <template>
   <div id="app">
     <b-container>
-      <b-row class="justify-content-md-center">
-        <b-col cols="7">
-          <VueForm @sent-form="sentForm" />
-        </b-col>
-        <b-col cols="10">
-          <TableRegister :items="formList" />
-        </b-col>
-      </b-row>
+      <router-view to="/"></router-view>
     </b-container>
   </div>
 </template>
 
 <script>
-import VueForm from './components/VueForm.vue';
-import TableRegister from './components/TableRegister.vue';
-
 export default {
   name: 'App',
-  components: {
-    VueForm,
-    TableRegister,
-  },
   data() {
     return {
       formList: [],
